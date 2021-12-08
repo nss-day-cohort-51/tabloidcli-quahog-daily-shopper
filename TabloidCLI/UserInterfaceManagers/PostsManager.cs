@@ -107,11 +107,17 @@ namespace TabloidCLI.UserInterfaceManagers
             {
                 postToEdit.Url = url;
             }
-            Console.Write("New bio (blank to leave unchanged: ");
+            Console.Write("New Publish Date (blank to leave unchanged: ");
             DateTime? datetime = DateTime.Parse(Console.ReadLine());
             if (!datetime.HasValue)
             {
                 postToEdit.PublishDateTime = (DateTime)datetime;
+            }
+            Console.Write("New link (blank to leave unchanged: ");
+            int blogid = int.Parse(Console.ReadLine());
+            if (blogid = )
+            {
+                postToEdit.Blog.Id= (int)blogid;
             }
 
             _postRepository.Update(postToEdit);
