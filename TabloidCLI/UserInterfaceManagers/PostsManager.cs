@@ -35,7 +35,7 @@ namespace TabloidCLI.UserInterfaceManagers
                 case "2":
                     
                     return this;
-                case "3":
+                case "3": Edit();
                     return this;
                 case "4":
                     return this;
@@ -54,5 +54,69 @@ namespace TabloidCLI.UserInterfaceManagers
                 Console.WriteLine($"\nTitle:{post.Title}\nUrl: {post.Url}\n");
             }
         }
+        private Post Choose(string prompt = null)
+        {
+            if (prompt == null)
+            {
+                prompt = "Please choose an Post:";
+            }
+
+            Console.WriteLine(prompt);
+
+            List<Post> posts = _postRepository.GetAll();
+
+            for (int i = 0; i < posts.Count; i++)
+            {
+                Post post = posts[i];
+                Console.WriteLine($" {i + 1}) {post.Title}");
+            }
+            Console.Write("> ");
+
+            string input = Console.ReadLine();
+            try
+            {
+                int choice = int.Parse(input);
+                return posts[choice - 1];
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Invalid Selection");
+                return null;
+            }
+        }
+
+        private void Edit()
+        {
+            
+
+            Post postToEdit = Choose("Which post would you like to edit?");
+            if (postToEdit == null)
+            {
+                return;
+            }
+
+            Console.Write("New post title (blank to leave unchanged: ");
+            string title = Console.ReadLine();
+            if (!string.IsNullOrWhiteSpace(title))
+            {
+                postToEdit.Title = title;
+            }
+            Console.Write("New link (blank to leave unchanged: ");
+            string url = Console.ReadLine();
+            if (!string.IsNullOrWhiteSpace(url))
+            {
+                postToEdit.Url = url;
+            }
+            Console.Write("New bio (blank to leave unchanged: ");
+            DateTime? datetime = DateTime.Parse(Console.ReadLine());
+            if (!datetime.HasValue)
+            {
+                postToEdit.PublishDateTime = (DateTime)datetime;
+            }
+
+            _postRepository.Update(postToEdit);
+        }
+
+
     }
 }

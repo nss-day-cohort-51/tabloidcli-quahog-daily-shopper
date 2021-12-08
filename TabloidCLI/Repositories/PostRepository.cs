@@ -158,7 +158,28 @@ namespace TabloidCLI.Repositories
 
         public void Update(Post post)
         {
-            throw new NotImplementedException();
+            
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"UPDATE Post 
+                                        SET Title    = @Title,
+                                            AuthorId = @AuthorId,
+                                            URL      = @URL,  
+                                            BlogId   = @BlogId,
+                                            PublishDateTime =@PublishDateTime
+                                        WHERE id =@Id";
+                                         
+                                        
+                    cmd.Parameters.AddWithValue("@Title", post.Title);
+                    cmd.Parameters.AddWithValue("@URL", post.Url);
+                    cmd.Parameters.AddWithValue("@BlogId", post.Blog.Id);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
         }
 
         public void Delete(int id)
