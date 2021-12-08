@@ -9,9 +9,12 @@ namespace TabloidCLI.UserInterfaceManagers
 
         public IUserInterfaceManager Execute()
         {
+            Console.WriteLine("WELCOME TO TABLOID CLI");
             Console.WriteLine("Main Menu");
+           
 
-            Console.WriteLine(" 1) Journal Management");
+
+            Console.WriteLine(" 1) My Journal Management");
             Console.WriteLine(" 2) Blog Management");
             Console.WriteLine(" 3) Author Management");
             Console.WriteLine(" 4) Post Management");
@@ -26,7 +29,7 @@ namespace TabloidCLI.UserInterfaceManagers
                 case "1": throw new NotImplementedException();
                 case "2": throw new NotImplementedException();
                 case "3": return new AuthorManager(this, CONNECTION_STRING);
-                case "4": throw new NotImplementedException();
+                case "4": return new PostsManager(this, CONNECTION_STRING);
                 case "5": return new TagManager(this, CONNECTION_STRING);
                 case "6": return new SearchManager(this, CONNECTION_STRING);
                 case "0":
