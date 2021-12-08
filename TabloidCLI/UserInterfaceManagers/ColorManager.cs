@@ -19,9 +19,7 @@ namespace TabloidCLI.UserInterfaceManagers
         public IUserInterfaceManager Execute()
         {
             ConsoleColor background = Console.BackgroundColor;
-            ConsoleColor foreground = Console.ForegroundColor;
 
-            Console.WriteLine($"Current Background Color: {background}");
             Console.WriteLine("Select New Background Color:");
             Console.WriteLine(" 1) Red");
             Console.WriteLine(" 2) Yellow");
