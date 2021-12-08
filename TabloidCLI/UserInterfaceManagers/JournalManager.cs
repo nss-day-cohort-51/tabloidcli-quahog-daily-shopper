@@ -21,7 +21,7 @@ namespace TabloidCLI.UserInterfaceManagers
         {
             Console.WriteLine("Journal Menu");
             Console.WriteLine(" 1) List Journals");
-            //Console.WriteLine(" 2) Journal Details");
+            Console.WriteLine(" 2) Journal Details");
             Console.WriteLine(" 3) Add Journal");
             Console.WriteLine(" 4) Edit Journal");
             Console.WriteLine(" 5) Remove Journal");
@@ -34,16 +34,19 @@ namespace TabloidCLI.UserInterfaceManagers
                 case "1":
                     List();
                     return this;
-                //case "2":
-                //    Journal journal = Choose();
-                //    if (journal == null)
-                //    {
-                //        return this;
-                //    }
-                //    else
-                //    {
-                //        return new JournalDetailManager(this, _connectionString, journal.Id);
-                //    }
+                case "2":
+                    Journal journal = Choose();
+                    if (journal == null)
+                    {
+                        return this;
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Title: {journal.Title}");
+                        Console.WriteLine($"Date Created: {journal.CreateDateTime.ToShortDateString()}");
+                        Console.WriteLine($"Content: {journal.Content}");
+                        return this;
+                    }
                 case "3":
                     Add();
                     return this;
@@ -65,7 +68,7 @@ namespace TabloidCLI.UserInterfaceManagers
             List<Journal> journals = _journalRepository.GetAll();
             foreach (Journal journal in journals)
             {
-                Console.WriteLine(journal);
+                Console.WriteLine($"Entry '{journal.Title}' created on {journal.CreateDateTime.ToShortDateString()}");
             }
         }
         private Journal Choose(string prompt = null)
@@ -120,7 +123,6 @@ namespace TabloidCLI.UserInterfaceManagers
             {
                 return;
             }
-
             Console.WriteLine();
             Console.Write("New title (blank to leave unchanged): ");
             string title = Console.ReadLine();
