@@ -12,7 +12,6 @@ namespace TabloidCLI.UserInterfaceManagers
         private PostRepository _postRepository;
         private TagRepository _tagRepository;
         private int _authorId;
-
         public AuthorDetailManager(IUserInterfaceManager parentUI, string connectionString, int authorId)
         {
             _parentUI = parentUI;
@@ -21,7 +20,6 @@ namespace TabloidCLI.UserInterfaceManagers
             _tagRepository = new TagRepository(connectionString);
             _authorId = authorId;
         }
-
         public IUserInterfaceManager Execute()
         {
             Author author = _authorRepository.Get(_authorId);
@@ -55,7 +53,6 @@ namespace TabloidCLI.UserInterfaceManagers
                     return this;
             }
         }
-
         private void View()
         {
             Author author = _authorRepository.Get(_authorId);
@@ -68,7 +65,6 @@ namespace TabloidCLI.UserInterfaceManagers
             }
             Console.WriteLine();
         }
-
         private void ViewBlogPosts()
         {
             List<Post> posts = _postRepository.GetByAuthor(_authorId);
@@ -78,7 +74,6 @@ namespace TabloidCLI.UserInterfaceManagers
             }
             Console.WriteLine();
         }
-
         private void AddTag()
         {
             Author author = _authorRepository.Get(_authorId);
@@ -105,7 +100,6 @@ namespace TabloidCLI.UserInterfaceManagers
                 Console.WriteLine("Invalid Selection. Won't add any tags.");
             }
         }
-
         private void RemoveTag()
         {
             Author author = _authorRepository.Get(_authorId);
