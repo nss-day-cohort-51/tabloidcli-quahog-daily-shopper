@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using TabloidCLI.Models;
+using TabloidCLI.Repositories;
 
 namespace TabloidCLI.UserInterfaceManagers
 {
@@ -32,7 +33,7 @@ namespace TabloidCLI.UserInterfaceManagers
                 case "1":
                     return this;
                 case "2":
-                    SearchPost();
+                    //SearchPost();
                     return this;
                 case "3":
                     return this;
