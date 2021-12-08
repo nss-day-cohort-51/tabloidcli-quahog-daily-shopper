@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using TabloidCLI.Models;
+using TabloidCLI.Repositories;
 
 namespace TabloidCLI.UserInterfaceManagers
 {
@@ -29,10 +30,10 @@ namespace TabloidCLI.UserInterfaceManagers
             string choice = Console.ReadLine();
             switch (choice)
             {
-                case "1":
+                case "1": List();
                     return this;
                 case "2":
-                    SearchPost();
+                    
                     return this;
                 case "3":
                     return this;
@@ -43,6 +44,14 @@ namespace TabloidCLI.UserInterfaceManagers
                 default:
                     Console.WriteLine("Invalid Selection");
                     return this;
+            }
+        }
+        private void List()
+        {
+            List<Post> posts = _postRepository.GetAll();
+            foreach (Post post in posts)
+            {
+                Console.WriteLine($"\nTitle:{post.Title}\nUrl: {post.Url}\n");
             }
         }
     }
