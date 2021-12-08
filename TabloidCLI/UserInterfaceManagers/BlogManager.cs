@@ -148,5 +148,4 @@ namespace TabloidCLI.UserInterfaceManagers
                 _blogRepository.Delete(blogToDelete.Id);
             }
         }
-    }
-}
+
