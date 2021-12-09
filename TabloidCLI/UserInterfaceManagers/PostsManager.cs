@@ -38,7 +38,25 @@ namespace TabloidCLI.UserInterfaceManagers
                 case "3": Edit();
                     return this;
                 case "4":
-                    return this;
+                    Console.WriteLine("Please choose a post:");
+                    List<Post> posts = _postRepository.GetAll();
+                    for (int i = 0; i < posts.Count; i++)
+                    {
+                        Post post = posts[i];
+                        Console.WriteLine($" {i + 1}) {post.Title}");
+                    }
+                    Console.Write("> ");
+                    string input = Console.ReadLine();
+                    try
+                    {
+                        int pchoice = int.Parse(input);
+                        return new NoteManager(this, _connectionString, posts[pchoice - 1], pchoice);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Invalid Selection");
+                        return this;
+                    }                   
                 case "0":
                     return _parentUI;
                 default:

@@ -9,7 +9,6 @@ namespace TabloidCLI.Repositories
     public class PostRepository : DatabaseConnector, IRepository<Post>
     {
         public PostRepository(string connectionString) : base(connectionString) { }
-
         public List<Post> GetAll()
         {
             using (SqlConnection conn = Connection)
@@ -48,13 +47,10 @@ namespace TabloidCLI.Repositories
                 }
             }
         }
-
-
         public Post Get(int id)
         {
             throw new NotImplementedException();
         }
-
         public List<Post> GetByAuthor(int authorId)
         {
             using (SqlConnection conn = Connection)
@@ -112,7 +108,6 @@ namespace TabloidCLI.Repositories
                 }
             }
         }
-
         public List<Post> GetByBlog(int blogId)
         {
             using (SqlConnection conn = Connection)
@@ -159,12 +154,10 @@ namespace TabloidCLI.Repositories
                 }
             }
         }
-
         public void Insert(Post post)
         {
             throw new NotImplementedException();
         }
-
         public void Update(Post post)
         {
             
@@ -195,7 +188,6 @@ namespace TabloidCLI.Repositories
                 }
             }
         }
-
         public void Delete(int id)
         {
             throw new NotImplementedException();
