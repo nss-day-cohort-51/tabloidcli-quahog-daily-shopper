@@ -25,7 +25,7 @@ namespace TabloidCLI.Repositories
                             Id = reader.GetInt32(reader.GetOrdinal("Id")),
                             Title = reader.GetString(reader.GetOrdinal("Title")),
                             Url = reader.GetString(reader.GetOrdinal("URL")),
-                            PublishDateTime = reader.GetDateTime(reader.GetOrdinal("PublishDateTime")),
+                            PublishDateTime = reader.GetDateTime(reader.GetOrdinal  ("PublishDateTime")),
                             Blog = new Blog()
                             {
                                 Id = reader.GetInt32(reader.GetOrdinal("BlogId"))
@@ -42,10 +42,7 @@ namespace TabloidCLI.Repositories
                 }
             }
         }
-        public Post Get(int id)
-        {
-            throw new NotImplementedException();
-        }
+        
         public List<Post> GetByAuthor(int authorId)
         {
             using (SqlConnection conn = Connection)
@@ -198,5 +195,47 @@ namespace TabloidCLI.Repositories
                 }
             }
         }
+        public Post Get(int id)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"SELECT *
+                                          FROM Post";
+
+                    Post post = null;
+
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        if (post == null)
+                        {
+                             post = new Post()
+                            {
+                                Title = reader.GetString(reader.GetOrdinal("Title")),
+                                Url = reader.GetString(reader.GetOrdinal("URL")),
+                                PublishDateTime = reader.GetDateTime(reader.GetOrdinal("PublishDateTime")),
+                                Blog = new Blog()
+                                {
+                                    Id = reader.GetInt32(reader.GetOrdinal("BlogId"))
+                                },
+                                Author = new Author()
+                                {
+                                    Id = reader.GetInt32(reader.GetOrdinal("AuthorId"))
+                                }
+
+                            };
+                        }
+                    }
+
+                    reader.Close();
+
+                    return post;
+                }
+            }
+        }
+
     }
 }
