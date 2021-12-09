@@ -28,7 +28,16 @@ namespace TabloidCLI.Repositories
                         {
                             Title = reader.GetString(reader.GetOrdinal("Title")),
                             Url = reader.GetString(reader.GetOrdinal("URL")),
-                          
+                            PublishDateTime = reader.GetDateTime(reader.GetOrdinal("PublishDateTime")),
+                            Blog = new Blog()
+                            {
+                                Id = reader.GetInt32(reader.GetOrdinal("BlogId"))
+                            },
+                            Author = new Author()
+                              {
+                                  Id = reader.GetInt32(reader.GetOrdinal("AuthorId"))
+                              }
+
                         };
                         posts.Add(post);
                     }
@@ -165,10 +174,12 @@ namespace TabloidCLI.Repositories
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"UPDATE Post 
+                                        
                                         SET Title    = @Title,
                                             AuthorId = @AuthorId,
                                             URL      = @URL,  
                                             BlogId   = @BlogId,
+                                            
                                             PublishDateTime =@PublishDateTime
                                         WHERE id =@Id";
                                          
@@ -176,6 +187,9 @@ namespace TabloidCLI.Repositories
                     cmd.Parameters.AddWithValue("@Title", post.Title);
                     cmd.Parameters.AddWithValue("@URL", post.Url);
                     cmd.Parameters.AddWithValue("@BlogId", post.Blog.Id);
+                    cmd.Parameters.AddWithValue("@PublishDateTime", post.PublishDateTime);
+                    cmd.Parameters.AddWithValue("@AuthorId", post.Author.Id);
+                    cmd.Parameters.AddWithValue("@Id", post.Id);
 
                     cmd.ExecuteNonQuery();
                 }

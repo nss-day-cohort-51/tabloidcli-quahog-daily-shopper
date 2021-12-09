@@ -51,7 +51,7 @@ namespace TabloidCLI.UserInterfaceManagers
             List<Post> posts = _postRepository.GetAll();
             foreach (Post post in posts)
             {
-                Console.WriteLine($"\nTitle:{post.Title}\nUrl: {post.Url}\n");
+                Console.WriteLine($"\nTitle:{post.Title}\nUrl: {post.Url}\nDate Published:{post.PublishDateTime}\nAuthor:{post.Author.Id}\nBlog:{post.Blog.Id}");
             }
         }
         private Post Choose(string prompt = null)
@@ -107,18 +107,30 @@ namespace TabloidCLI.UserInterfaceManagers
             {
                 postToEdit.Url = url;
             }
+            
             Console.Write("New Publish Date (blank to leave unchanged: ");
-            DateTime? datetime = DateTime.Parse(Console.ReadLine());
-            if (!datetime.HasValue)
+            DateTime datetime;
+            if (DateTime.TryParse(Console.ReadLine(), out datetime))
             {
-                postToEdit.PublishDateTime = (DateTime)datetime;
-            }
-            Console.Write("New link (blank to leave unchanged: ");
-            int blogid = int.Parse(Console.ReadLine());
-            if (blogid = )
+                postToEdit.PublishDateTime = datetime;
+            };
+
+            Console.Write("new blogId (blank to leave unchanged: ");
+            int blogid;
+            
+            if (int.TryParse(Console.ReadLine(), out blogid))
             {
-                postToEdit.Blog.Id= (int)blogid;
+                postToEdit.Blog.Id = blogid;
             }
+
+            Console.Write("new authorId (blank to leave unchanged: ");
+            int authorId;
+
+            if (int.TryParse(Console.ReadLine(), out authorId))
+            {
+                postToEdit.Author.Id = authorId;
+            }
+
 
             _postRepository.Update(postToEdit);
         }
