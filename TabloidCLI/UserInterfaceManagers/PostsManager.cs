@@ -22,6 +22,7 @@ namespace TabloidCLI.UserInterfaceManagers
             Console.WriteLine(" 2) Add Post");
             Console.WriteLine(" 3) Edit Post");
             Console.WriteLine(" 4) Note Management");
+            Console.WriteLine(" 5) Remove Post");
             Console.WriteLine(" 0) Go Back");
             Console.Write("> ");
             string choice = Console.ReadLine();
@@ -53,7 +54,10 @@ namespace TabloidCLI.UserInterfaceManagers
                     {
                         Console.WriteLine("Invalid Selection");
                         return this;
-                    }                   
+                    }
+                case "5":
+                    Remove();
+                    return this;
                 case "0":
                     return _parentUI;
                 default:
@@ -99,7 +103,7 @@ namespace TabloidCLI.UserInterfaceManagers
         {
             if (prompt == null)
             {
-                prompt = "Please choose an Post:";
+                prompt = "Please choose a Post:";
             }
             Console.WriteLine(prompt);
             List<Post> posts = _postRepository.GetAll();
@@ -159,6 +163,15 @@ namespace TabloidCLI.UserInterfaceManagers
                 postToEdit.Author.Id = authorId;
             }
             _postRepository.Update(postToEdit);
+        }
+
+        private void Remove()
+        {
+            Post postToDelete = Choose("Which post would you like to remove?");
+            if (postToDelete != null)
+            {
+                _postRepository.Delete(postToDelete.Id);
+            }
         }
     }
 }
