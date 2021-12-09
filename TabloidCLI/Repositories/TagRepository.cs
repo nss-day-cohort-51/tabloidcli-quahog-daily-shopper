@@ -4,13 +4,11 @@ using Microsoft.Data.SqlClient;
 using TabloidCLI.Models;
 using TabloidCLI.Repositories;
 using TabloidCLI.UserInterfaceManagers;
-
 namespace TabloidCLI
 {
     public class TagRepository : DatabaseConnector, IRepository<Tag>
     {
         public TagRepository(string connectionString) : base(connectionString) { }
-
         public List<Tag> GetAll()
         {
             using (SqlConnection conn = Connection)
@@ -20,7 +18,6 @@ namespace TabloidCLI
                 {
                     cmd.CommandText = @"SELECT id, Name FROM Tag";
                     List<Tag> tags = new List<Tag>();
-
                     SqlDataReader reader = cmd.ExecuteReader();
                     while (reader.Read())
                     {
@@ -31,14 +28,11 @@ namespace TabloidCLI
                         };
                         tags.Add(tag);
                     }
-
                     reader.Close();
-
                     return tags;
                 }
             }
         }
-
                public Tag Get(int id)
         {
             using (SqlConnection conn = Connection)
@@ -50,11 +44,8 @@ namespace TabloidCLI
                                                Name
                                           FROM Tag 
                                          WHERE b.id = @id";
-
                     cmd.Parameters.AddWithValue("@id", id);
-
                     Tag tag = null;
-
                     SqlDataReader reader = cmd.ExecuteReader();
                     while (reader.Read())
                     {
@@ -67,15 +58,11 @@ namespace TabloidCLI
                             };
                         }
                     }
-
                     reader.Close();
-
                     return tag;
                 }
             }
         }
-
-
         public void Insert(Tag tag)
         {
             using (SqlConnection conn = Connection)
@@ -86,12 +73,10 @@ namespace TabloidCLI
                     cmd.CommandText = @"INSERT INTO Tag (Name)
                                                      VALUES (@Name)";
                     cmd.Parameters.AddWithValue("@Name", tag.Name);
-
                     cmd.ExecuteNonQuery();
                 }
             }
         }
-
         public void Update(Tag tag)
         {
             using (SqlConnection conn = Connection)
@@ -102,15 +87,12 @@ namespace TabloidCLI
                     cmd.CommandText = @"UPDATE Tag 
                                            SET Name = @name
                                          WHERE id = @id";
-
                     cmd.Parameters.AddWithValue("@name", tag.Name);
                     cmd.Parameters.AddWithValue("@id", tag.Id);
-
                     cmd.ExecuteNonQuery();
                 }
             }
         }
-
         public void Delete(int id)
         {
             using (SqlConnection conn = Connection)
@@ -120,12 +102,10 @@ namespace TabloidCLI
                 {
                     cmd.CommandText = @"DELETE FROM Tag WHERE id = @id";
                     cmd.Parameters.AddWithValue("@id", id);
-
                     cmd.ExecuteNonQuery();
                 }
             }
         }
-
         public SearchResults<Author> SearchAuthors(string tagName)
         {
             using (SqlConnection conn = Connection)
@@ -143,7 +123,6 @@ namespace TabloidCLI
                                          WHERE t.Name LIKE @name";
                     cmd.Parameters.AddWithValue("@name", $"%{tagName}%");
                     SqlDataReader reader = cmd.ExecuteReader();
-
                     SearchResults<Author> results = new SearchResults<Author>();
                     while (reader.Read())
                     {
@@ -156,9 +135,7 @@ namespace TabloidCLI
                         };
                         results.Add(author);
                     }
-
                     reader.Close();
-
                     return results;
                 }
             }
@@ -180,7 +157,6 @@ namespace TabloidCLI
                                          WHERE t.Name LIKE @name";
                     cmd.Parameters.AddWithValue("@name", $"%{tagName}%");
                     SqlDataReader reader = cmd.ExecuteReader();
-
                     SearchResults<Post> results = new SearchResults<Post>();
                     while (reader.Read())
                     {
@@ -193,9 +169,7 @@ namespace TabloidCLI
                         };
                         results.Add(post);
                     }
-
                     reader.Close();
-
                     return results;
                 }
             }
@@ -216,7 +190,6 @@ namespace TabloidCLI
                                          WHERE t.Name LIKE @name";
                     cmd.Parameters.AddWithValue("@name", $"%{tagName}%");
                     SqlDataReader reader = cmd.ExecuteReader();
-
                     SearchResults<Blog> results = new SearchResults<Blog>();
                     while (reader.Read())
                     {
@@ -228,13 +201,10 @@ namespace TabloidCLI
                         };
                         results.Add(blog);
                     }
-
                     reader.Close();
-
                     return results;
                 }
             }
         }
-
     }
 }

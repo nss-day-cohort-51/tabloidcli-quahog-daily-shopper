@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using TabloidCLI.Models;
-
 namespace TabloidCLI.UserInterfaceManagers
 {
     class ColorManager : IUserInterfaceManager
@@ -10,16 +9,13 @@ namespace TabloidCLI.UserInterfaceManagers
         private readonly IUserInterfaceManager _parentUI;
         private AuthorRepository _authorRepository;
         private string _connectionString;
-
         public ColorManager(IUserInterfaceManager parentUI)
         {
             _parentUI = parentUI;
         }
-
         public IUserInterfaceManager Execute()
         {
             ConsoleColor background = Console.BackgroundColor;
-
             Console.WriteLine("Select New Background Color:");
             Console.WriteLine(" 1) Red");
             Console.WriteLine(" 2) Yellow");
@@ -30,7 +26,6 @@ namespace TabloidCLI.UserInterfaceManagers
             Console.WriteLine(" 7) Black");
             Console.WriteLine(" 8) Grey");
             Console.WriteLine(" 0) Go Back");
-
             Console.Write("> ");
             string choice = Console.ReadLine();
             switch (choice)

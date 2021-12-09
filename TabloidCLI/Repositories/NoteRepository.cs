@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using TabloidCLI.Models;
-
 namespace TabloidCLI.Repositories
 {
     public class NoteRepository : DatabaseConnector, IRepository<Note>

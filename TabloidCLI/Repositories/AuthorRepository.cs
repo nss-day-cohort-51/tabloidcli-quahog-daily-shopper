@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using Microsoft.Data.SqlClient;
 using TabloidCLI.Models;
 using TabloidCLI.Repositories;
-
 namespace TabloidCLI
 {
     public class AuthorRepository : DatabaseConnector, IRepository<Author>
     {
         public AuthorRepository(string connectionString) : base(connectionString) { }
-
         public List<Author> GetAll()
         {
             using (SqlConnection conn = Connection)
@@ -22,9 +20,7 @@ namespace TabloidCLI
                                                LastName,
                                                Bio
                                           FROM Author";
-
                     List<Author> authors = new List<Author>();
-
                     SqlDataReader reader = cmd.ExecuteReader();
                     while (reader.Read())
                     {
@@ -37,14 +33,11 @@ namespace TabloidCLI
                         };
                         authors.Add(author);
                     }
-
                     reader.Close();
-
                     return authors;
                 }
             }
         }
-
         public Author Get(int id)
         {
             using (SqlConnection conn = Connection)
@@ -62,11 +55,8 @@ namespace TabloidCLI
                                                LEFT JOIN AuthorTag at on a.Id = at.AuthorId
                                                LEFT JOIN Tag t on t.Id = at.TagId
                                          WHERE a.id = @id";
-
                     cmd.Parameters.AddWithValue("@id", id);
-
                     Author author = null;
-
                     SqlDataReader reader = cmd.ExecuteReader();
                     while (reader.Read())
                     {
@@ -80,7 +70,6 @@ namespace TabloidCLI
                                 Bio = reader.GetString(reader.GetOrdinal("Bio")),
                             };
                         }
-
                         if (!reader.IsDBNull(reader.GetOrdinal("TagId")))
                         {
                             author.Tags.Add(new Tag()
@@ -90,14 +79,11 @@ namespace TabloidCLI
                             });
                         }
                     }
-
                     reader.Close();
-
                     return author;
                 }
             }
         }
-
         public void Insert(Author author)
         {
             using (SqlConnection conn = Connection)
@@ -110,12 +96,10 @@ namespace TabloidCLI
                     cmd.Parameters.AddWithValue("@firstName", author.FirstName);
                     cmd.Parameters.AddWithValue("@lastName", author.LastName);
                     cmd.Parameters.AddWithValue("@bio", author.Bio);
-
                     cmd.ExecuteNonQuery();
                 }
             }
         }
-
         public void Update(Author author)
         {
             using (SqlConnection conn = Connection)
@@ -128,17 +112,14 @@ namespace TabloidCLI
                                                LastName = @lastName,
                                                bio = @bio
                                          WHERE id = @id";
-
                     cmd.Parameters.AddWithValue("@firstName", author.FirstName);
                     cmd.Parameters.AddWithValue("@lastName", author.LastName);
                     cmd.Parameters.AddWithValue("@bio", author.Bio);
                     cmd.Parameters.AddWithValue("@id", author.Id);
-
                     cmd.ExecuteNonQuery();
                 }
             }
         }
-
         public void Delete(int id)
         {
             using (SqlConnection conn = Connection)
@@ -148,12 +129,10 @@ namespace TabloidCLI
                 {
                     cmd.CommandText = @"DELETE FROM Author WHERE id = @id";
                     cmd.Parameters.AddWithValue("@id", id);
-
                     cmd.ExecuteNonQuery();
                 }
             }
         }
-
         public void InsertTag(Author author, Tag tag)
         {
             using (SqlConnection conn = Connection)
@@ -169,7 +148,6 @@ namespace TabloidCLI
                 }
             }
         }
-
         public void DeleteTag(int authorId, int tagId)
         {
             using (SqlConnection conn = Connection)
@@ -182,7 +160,6 @@ namespace TabloidCLI
                                                TagId = @tagId";
                     cmd.Parameters.AddWithValue("@authorId", authorId);
                     cmd.Parameters.AddWithValue("@tagId", tagId);
-
                     cmd.ExecuteNonQuery();
                 }
             }
