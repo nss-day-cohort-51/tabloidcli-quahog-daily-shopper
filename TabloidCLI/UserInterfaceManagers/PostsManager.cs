@@ -35,7 +35,7 @@ namespace TabloidCLI.UserInterfaceManagers
                 case "2":
                     
                     return this;
-                case "3":
+                case "3": Edit();
                     return this;
                 case "4":
                     Console.WriteLine("Please choose a post:");
@@ -69,8 +69,90 @@ namespace TabloidCLI.UserInterfaceManagers
             List<Post> posts = _postRepository.GetAll();
             foreach (Post post in posts)
             {
-                Console.WriteLine($"\nTitle:{post.Title}\nUrl: {post.Url}\n");
+                Console.WriteLine($"\nTitle:{post.Title}\nUrl: {post.Url}\nDate Published:{post.PublishDateTime}\nAuthor:{post.Author.Id}\nBlog:{post.Blog.Id}");
             }
         }
+        private Post Choose(string prompt = null)
+        {
+            if (prompt == null)
+            {
+                prompt = "Please choose an Post:";
+            }
+
+            Console.WriteLine(prompt);
+
+            List<Post> posts = _postRepository.GetAll();
+
+            for (int i = 0; i < posts.Count; i++)
+            {
+                Post post = posts[i];
+                Console.WriteLine($" {i + 1}) {post.Title}");
+            }
+            Console.Write("> ");
+
+            string input = Console.ReadLine();
+            try
+            {
+                int choice = int.Parse(input);
+                return posts[choice - 1];
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Invalid Selection");
+                return null;
+            }
+        }
+
+        private void Edit()
+        {
+            
+
+            Post postToEdit = Choose("Which post would you like to edit?");
+            if (postToEdit == null)
+            {
+                return;
+            }
+
+            Console.Write("New post title (blank to leave unchanged: ");
+            string title = Console.ReadLine();
+            if (!string.IsNullOrWhiteSpace(title))
+            {
+                postToEdit.Title = title;
+            }
+            Console.Write("New link (blank to leave unchanged: ");
+            string url = Console.ReadLine();
+            if (!string.IsNullOrWhiteSpace(url))
+            {
+                postToEdit.Url = url;
+            }
+            
+            Console.Write("New Publish Date (blank to leave unchanged: ");
+            DateTime datetime;
+            if (DateTime.TryParse(Console.ReadLine(), out datetime))
+            {
+                postToEdit.PublishDateTime = datetime;
+            };
+
+            Console.Write("new blogId (blank to leave unchanged: ");
+            int blogid;
+            
+            if (int.TryParse(Console.ReadLine(), out blogid))
+            {
+                postToEdit.Blog.Id = blogid;
+            }
+
+            Console.Write("new authorId (blank to leave unchanged: ");
+            int authorId;
+
+            if (int.TryParse(Console.ReadLine(), out authorId))
+            {
+                postToEdit.Author.Id = authorId;
+            }
+
+
+            _postRepository.Update(postToEdit);
+        }
+
+
     }
 }
