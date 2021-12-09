@@ -186,12 +186,19 @@ namespace TabloidCLI.Repositories
         {
             using (SqlConnection conn = Connection)
             {
-                conn.Open();
-                using (SqlCommand cmd = conn.CreateCommand())
+                try
                 {
-                    cmd.CommandText = @"DELETE FROM Post WHERE id = @id";
-                    cmd.Parameters.AddWithValue("@id", id);
-                    cmd.ExecuteNonQuery();
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = @"DELETE FROM Post WHERE id = @id";
+                        cmd.Parameters.AddWithValue("@id", id);
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+                catch 
+                {
+                    Console.WriteLine("invalid selection");
                 }
             }
         }
