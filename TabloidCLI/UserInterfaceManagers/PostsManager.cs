@@ -33,7 +33,7 @@ namespace TabloidCLI.UserInterfaceManagers
                 case "1": List();
                     return this;
                 case "2":
-                    
+                    Add();
                     return this;
                 case "3": Edit();
                     return this;
@@ -71,6 +71,37 @@ namespace TabloidCLI.UserInterfaceManagers
             {
                 Console.WriteLine($"\nTitle:{post.Title}\nUrl: {post.Url}\nDate Published:{post.PublishDateTime}\nAuthor:{post.Author.Id}\nBlog:{post.Blog.Id}");
             }
+        }
+
+        private void Add()
+        {
+            Console.WriteLine("New Post");
+            Post post = new Post();
+
+            Console.Write("Title: ");
+            post.Title = Console.ReadLine();
+
+            Console.Write("Url: ");
+            post.Url = Console.ReadLine();
+
+            Console.Write("Date Published: ");
+            Console.Write("Enter a month: ");
+            int month = int.Parse(Console.ReadLine());
+            Console.Write("Enter a day: ");
+            int day = int.Parse(Console.ReadLine());
+            Console.Write("Enter a year: ");
+            int year = int.Parse(Console.ReadLine());
+            post.PublishDateTime = new DateTime(year, month, day);
+
+            Console.Write("Author: ");
+            var author = new Author();
+            author.Id = int.Parse(Console.ReadLine());
+            Console.Write("Blog: ");
+            var blog = new Blog();
+            blog.Id= int.Parse(Console.ReadLine());
+
+
+            _postRepository.Insert(post);
         }
         private Post Choose(string prompt = null)
         {

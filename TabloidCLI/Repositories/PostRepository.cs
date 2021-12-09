@@ -156,7 +156,49 @@ namespace TabloidCLI.Repositories
         }
         public void Insert(Post post)
         {
-            throw new NotImplementedException();
+            
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    
+                    cmd.CommandText = @"INSERT INTO Post (Title, Url, PublishDateTime, AuthorId, BlogId )
+                                                     VALUES (@title, @url, @publishDateTime, @authorId, @blogId)
+                                                    WHERE id =@Id";
+                    cmd.Parameters.AddWithValue("@title", post.Title);
+                    cmd.Parameters.AddWithValue("@url", post.Url);
+                    cmd.Parameters.AddWithValue("@publishDateTime", post.PublishDateTime);
+                    cmd.Parameters.AddWithValue("@authorId", post.Author.Id);
+                    cmd.Parameters.AddWithValue("@blogId", post.Blog.Id);
+
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    List<Post> posts = new List<Post>();
+                    while (reader.Read())
+                    {
+                        Post newPost = new Post()
+                        {
+                            Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                            Title = reader.GetString(reader.GetOrdinal("PostTitle")),
+                            Url = reader.GetString(reader.GetOrdinal("PostUrl")),
+                            PublishDateTime = reader.GetDateTime(reader.GetOrdinal("PublishDateTime")),
+                            Blog = new Blog()
+                            {
+                                Id = reader.GetInt32(reader.GetOrdinal("BlogId")),
+                                Title = reader.GetString(reader.GetOrdinal("BlogTitle")),
+                                Url = reader.GetString(reader.GetOrdinal("BlogUrl")),
+                            },
+                            Author = new Author()
+                            {
+                                Id = reader.GetInt32(reader.GetOrdinal("AuthorId")),
+                                
+                            }
+                        };
+                        posts.Add(newPost);
+                    }
+                    cmd.ExecuteNonQuery();
+                }
+            }
         }
         public void Update(Post post)
         {
