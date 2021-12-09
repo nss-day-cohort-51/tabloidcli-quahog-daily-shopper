@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Text;
 using TabloidCLI.Models;
 using TabloidCLI.Repositories;
-
 namespace TabloidCLI.UserInterfaceManagers
 {
     class NoteManager : IUserInterfaceManager
@@ -13,7 +12,6 @@ namespace TabloidCLI.UserInterfaceManagers
         private string _connectionString;
         private Post _post;
         private int _postId;
-
         public NoteManager(IUserInterfaceManager parentUI, string connectionString, Post post, int postId)
         {
             _parentUI = parentUI;
@@ -41,12 +39,39 @@ namespace TabloidCLI.UserInterfaceManagers
                     Add();
                     return this;
                 case "3":
+                    Remove();
                     return this;
                 case "0":
                     return _parentUI;
                 default:
                     Console.WriteLine("Invalid Selection");
                     return this;
+            }
+        }
+        private Note Choose(string prompt = null)
+        {
+            if (prompt == null)
+            {
+                prompt = "Please choose a Note:";
+            }
+            Console.WriteLine(prompt);
+            List<Note> notes = _noteRepository.GetAll();
+            for (int i = 0; i < notes.Count; i++)
+            {
+                Note note = notes[i];
+                Console.WriteLine($" {i + 1}) {note.Title}");
+            }
+            Console.Write("> ");
+            string input = Console.ReadLine();
+            try
+            {
+                int choice = int.Parse(input);
+                return notes[choice - 1];
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Invalid Selection");
+                return null;
             }
         }
         private void Add()
@@ -67,6 +92,14 @@ namespace TabloidCLI.UserInterfaceManagers
             foreach (Note note in notes)
             {
                 Console.WriteLine(note.Title);
+            }
+        }
+        private void Remove()
+        {
+            Note noteToDelete = Choose("Which note would you like to remove?");
+            if (noteToDelete != null)
+            {
+                _noteRepository.Delete(noteToDelete.Id);
             }
         }
     }
