@@ -1,29 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using TabloidCLI.Models;
 using TabloidCLI.Repositories;
 
 namespace TabloidCLI.UserInterfaceManagers
 {
-    class PostsManager : IUserInterfaceManager
+    class NoteManager : IUserInterfaceManager
     {
         private readonly IUserInterfaceManager _parentUI;
-        private PostRepository _postRepository;
+        private NoteRepository _noteRepository;
         private string _connectionString;
 
-        public PostsManager(IUserInterfaceManager parentUI, string connectionString)
+        public NoteManager(IUserInterfaceManager parentUI, string connectionString)
         {
             _parentUI = parentUI;
-            _postRepository = new PostRepository(connectionString);
+            _noteRepository = new NoteRepository(connectionString);
             _connectionString = connectionString;
         }
         public IUserInterfaceManager Execute()
         {
-            Console.WriteLine("Search Menu");
-            Console.WriteLine(" 1) List Posts");
-            Console.WriteLine(" 2) Add Post");
-            Console.WriteLine(" 3) Edit Post");
-            Console.WriteLine(" 4) Note Management");
+            Console.WriteLine("Note Menu");
+            Console.WriteLine(" 1) List Notes");
+            Console.WriteLine(" 2) Add Notes");
+            Console.WriteLine(" 3) Remove Note");
             Console.WriteLine(" 0) Go Back");
 
             Console.Write("> ");
@@ -33,18 +33,31 @@ namespace TabloidCLI.UserInterfaceManagers
                 case "1":
                     return this;
                 case "2":
-                    //SearchPost();
+                    Add();
                     return this;
                 case "3":
                     return this;
-                case "4":
-                    return new NoteManager(this, _connectionString);
                 case "0":
                     return _parentUI;
                 default:
                     Console.WriteLine("Invalid Selection");
                     return this;
             }
+        }
+        private void Add()
+        {
+            Console.WriteLine("New Note");
+            Note note = new Note();
+
+            Console.Write("Title: ");
+            note.Title = Console.ReadLine();
+
+            Console.Write("Content: ");
+            note.Content = Console.ReadLine();
+
+            
+
+            _noteRepository.Insert(note);
         }
     }
 }
