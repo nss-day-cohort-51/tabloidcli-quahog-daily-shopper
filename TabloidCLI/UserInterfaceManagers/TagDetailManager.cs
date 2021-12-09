@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using TabloidCLI.Models;
 using TabloidCLI.Repositories;
-
 namespace TabloidCLI.UserInterfaceManagers
 {
     internal class TagDetailManager : IUserInterfaceManager
@@ -25,7 +24,6 @@ namespace TabloidCLI.UserInterfaceManagers
             Tag tag = _tagRepository.Get(_tagId);
             Console.WriteLine($"{tag.Name} Details");
             Console.WriteLine(" 1) View");
-
             Console.Write("> ");
             string choice = Console.ReadLine();
             switch (choice)
@@ -44,9 +42,7 @@ namespace TabloidCLI.UserInterfaceManagers
         {
             Tag tag = _tagRepository.Get(_tagId);
             Console.WriteLine($"Name: {tag.Name}");
-
         }
     }
 }
-        
       

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-
 namespace TabloidCLI.Models
 {
     public class Author
@@ -9,7 +8,6 @@ namespace TabloidCLI.Models
         public string LastName { get; set; }
         public string Bio { get; set; }
         public List<Tag> Tags { get; set; } = new List<Tag>();
-
         public string FullName
         {
             get
@@ -17,7 +15,6 @@ namespace TabloidCLI.Models
                 return $"{FirstName} {LastName}";
             }
         }
-
         public override string ToString()
         {
             return FullName;

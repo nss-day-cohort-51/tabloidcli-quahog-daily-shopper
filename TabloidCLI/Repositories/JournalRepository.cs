@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using TabloidCLI.Models;
-
 namespace TabloidCLI.Repositories
 {
     class JournalRepository : DatabaseConnector, IRepository<Journal>
@@ -34,9 +33,7 @@ namespace TabloidCLI.Repositories
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"SELECT id, Title, Content, CreateDateTime FROM Journal";
-
                     List<Journal> journals = new List<Journal>();
-
                     SqlDataReader reader = cmd.ExecuteReader();
                     while (reader.Read())
                     {
@@ -49,9 +46,7 @@ namespace TabloidCLI.Repositories
                         };
                         journals.Add(author);
                     }
-
                     reader.Close();
-
                     return journals;
                 }
             }

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using TabloidCLI.Models;
 using TabloidCLI.Repositories;
-
 namespace TabloidCLI.UserInterfaceManagers
 {
     class JournalManager : IUserInterfaceManager
@@ -10,7 +9,6 @@ namespace TabloidCLI.UserInterfaceManagers
         private readonly IUserInterfaceManager _parentUI;
         private JournalRepository _journalRepository;
         private string _connectionString;
-
         public JournalManager(IUserInterfaceManager parentUI, string connectionString)
         {
             _parentUI = parentUI;
@@ -26,7 +24,6 @@ namespace TabloidCLI.UserInterfaceManagers
             Console.WriteLine(" 4) Edit Journal");
             Console.WriteLine(" 5) Remove Journal");
             Console.WriteLine(" 0) Go Back");
-
             Console.Write("> ");
             string choice = Console.ReadLine();
             switch (choice)
@@ -77,18 +74,14 @@ namespace TabloidCLI.UserInterfaceManagers
             {
                 prompt = "Please choose a journal:";
             }
-
             Console.WriteLine(prompt);
-
             List<Journal> journals = _journalRepository.GetAll();
-
             for (int i = 0; i < journals.Count; i++)
             {
                 Journal journal = journals[i];
                 Console.WriteLine($" {i + 1}) {journal.Title}");
             }
             Console.Write("> ");
-
             string input = Console.ReadLine();
             try
             {
@@ -105,15 +98,11 @@ namespace TabloidCLI.UserInterfaceManagers
         {
             Console.WriteLine("New Journal");
             Journal journal = new Journal();
-
             Console.Write("Title: ");
             journal.Title = Console.ReadLine();
-
             Console.Write("Content: ");
             journal.Content = Console.ReadLine();
-
             journal.CreateDateTime = DateTime.Now;
-
             _journalRepository.Insert(journal);
         }
         private void Edit()
@@ -136,7 +125,6 @@ namespace TabloidCLI.UserInterfaceManagers
             {
                 journalToEdit.Content = content;
             }
-
             _journalRepository.Update(journalToEdit);
         }
         private void Remove()

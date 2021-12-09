@@ -1,19 +1,14 @@
 ﻿using System;
-
 namespace TabloidCLI.UserInterfaceManagers
 {
     public class MainMenuManager : IUserInterfaceManager
     {
         private const string CONNECTION_STRING = 
             @"Data Source=localhost\SQLEXPRESS;Database=TabloidCLI;Integrated Security=True";
-
         public IUserInterfaceManager Execute()
         {
             Console.WriteLine("WELCOME TO TABLOID CLI");
             Console.WriteLine("Main Menu");
-           
-
-
             Console.WriteLine(" 1) My Journal Management");
             Console.WriteLine(" 2) Blog Management");
             Console.WriteLine(" 3) Author Management");
@@ -22,7 +17,6 @@ namespace TabloidCLI.UserInterfaceManagers
             Console.WriteLine(" 6) Search by Tag");
             Console.WriteLine(" 7) Change Background Color");
             Console.WriteLine(" 0) Exit");
-
             Console.Write("> ");
             string choice = Console.ReadLine();
             switch (choice)

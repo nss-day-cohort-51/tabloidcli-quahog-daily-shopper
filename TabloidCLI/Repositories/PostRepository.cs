@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Microsoft.Data.SqlClient;
 using TabloidCLI.Models;
 using TabloidCLI.Repositories;
-
 namespace TabloidCLI.Repositories
 {
     public class PostRepository : DatabaseConnector, IRepository<Post>
@@ -17,9 +16,7 @@ namespace TabloidCLI.Repositories
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"SElECT * FROM Post";
-
                     List<Post> posts = new List<Post>();
-
                     SqlDataReader reader = cmd.ExecuteReader();
                     while (reader.Read())
                     {
@@ -36,13 +33,10 @@ namespace TabloidCLI.Repositories
                               {
                                   Id = reader.GetInt32(reader.GetOrdinal("AuthorId"))
                               }
-
                         };
                         posts.Add(post);
                     }
-
                     reader.Close();
-
                     return posts;
                 }
             }
@@ -75,7 +69,6 @@ namespace TabloidCLI.Repositories
                                          WHERE p.AuthorId = @authorId";
                     cmd.Parameters.AddWithValue("@authorId", authorId);
                     SqlDataReader reader = cmd.ExecuteReader();
-
                     List<Post> posts = new List<Post>();
                     while (reader.Read())
                     {
@@ -101,9 +94,7 @@ namespace TabloidCLI.Repositories
                         };
                         posts.Add(post);
                     }
-
                     reader.Close();
-
                     return posts;
                 }
             }
@@ -128,7 +119,6 @@ namespace TabloidCLI.Repositories
                                          WHERE p.BlogId = @blogId";
                     cmd.Parameters.AddWithValue("@blogId", blogId);
                     SqlDataReader reader = cmd.ExecuteReader();
-
                     List<Post> posts = new List<Post>();
                     while (reader.Read())
                     {
@@ -147,85 +137,49 @@ namespace TabloidCLI.Repositories
                         };
                         posts.Add(post);
                     }
-
                     reader.Close();
-
                     return posts;
                 }
             }
         }
         public void Insert(Post post)
         {
-            
             using (SqlConnection conn = Connection)
             {
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    
                     cmd.CommandText = @"INSERT INTO Post (Title, Url, PublishDateTime, AuthorId, BlogId )
-                                                     VALUES (@title, @url, @publishDateTime, @authorId, @blogId)
-                                                    WHERE id =@Id";
+                                                     VALUES (@title, @url, @publishDateTime, @authorId, @blogId)";
                     cmd.Parameters.AddWithValue("@title", post.Title);
                     cmd.Parameters.AddWithValue("@url", post.Url);
                     cmd.Parameters.AddWithValue("@publishDateTime", post.PublishDateTime);
                     cmd.Parameters.AddWithValue("@authorId", post.Author.Id);
                     cmd.Parameters.AddWithValue("@blogId", post.Blog.Id);
-
-                    SqlDataReader reader = cmd.ExecuteReader();
-                    List<Post> posts = new List<Post>();
-                    while (reader.Read())
-                    {
-                        Post newPost = new Post()
-                        {
-                            Id = reader.GetInt32(reader.GetOrdinal("Id")),
-                            Title = reader.GetString(reader.GetOrdinal("PostTitle")),
-                            Url = reader.GetString(reader.GetOrdinal("PostUrl")),
-                            PublishDateTime = reader.GetDateTime(reader.GetOrdinal("PublishDateTime")),
-                            Blog = new Blog()
-                            {
-                                Id = reader.GetInt32(reader.GetOrdinal("BlogId")),
-                                Title = reader.GetString(reader.GetOrdinal("BlogTitle")),
-                                Url = reader.GetString(reader.GetOrdinal("BlogUrl")),
-                            },
-                            Author = new Author()
-                            {
-                                Id = reader.GetInt32(reader.GetOrdinal("AuthorId")),
-                                
-                            }
-                        };
-                        posts.Add(newPost);
-                    }
                     cmd.ExecuteNonQuery();
                 }
             }
         }
         public void Update(Post post)
         {
-            
             using (SqlConnection conn = Connection)
             {
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"UPDATE Post 
-                                        
                                         SET Title    = @Title,
                                             AuthorId = @AuthorId,
                                             URL      = @URL,  
                                             BlogId   = @BlogId,
-                                            
                                             PublishDateTime =@PublishDateTime
                                         WHERE id =@Id";
-                                         
-                                        
                     cmd.Parameters.AddWithValue("@Title", post.Title);
                     cmd.Parameters.AddWithValue("@URL", post.Url);
                     cmd.Parameters.AddWithValue("@BlogId", post.Blog.Id);
                     cmd.Parameters.AddWithValue("@PublishDateTime", post.PublishDateTime);
                     cmd.Parameters.AddWithValue("@AuthorId", post.Author.Id);
                     cmd.Parameters.AddWithValue("@Id", post.Id);
-
                     cmd.ExecuteNonQuery();
                 }
             }
