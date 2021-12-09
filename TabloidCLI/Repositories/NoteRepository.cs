@@ -27,9 +27,9 @@ namespace TabloidCLI.Repositories
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @"INSERT INTO Note (Title, Content, CreateDateTime, PostId ) VALUES (@firstName, @lastName, @createDateTime, @postId)";
-                    cmd.Parameters.AddWithValue("@firstName", note.Title);
-                    cmd.Parameters.AddWithValue("@lastName", note.Content);
+                    cmd.CommandText = @"INSERT INTO Note ( Title, Content, CreateDateTime, PostId ) VALUES (@title, @content, @createDateTime, @postId)";
+                    cmd.Parameters.AddWithValue("@title", note.Title);
+                    cmd.Parameters.AddWithValue("@content", note.Content);
                     cmd.Parameters.AddWithValue("@createDateTime", note.CreateDateTime.ToShortDateString());
                     cmd.Parameters.AddWithValue("@postId", note.PostId);
                     cmd.ExecuteNonQuery();
