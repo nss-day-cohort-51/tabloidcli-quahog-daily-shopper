@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using TabloidCLI.Models;
-
 namespace TabloidCLI.UserInterfaceManagers
 {
     public class BlogManager : IUserInterfaceManager
@@ -9,14 +8,12 @@ namespace TabloidCLI.UserInterfaceManagers
         private readonly IUserInterfaceManager _parentUI;
         private BlogRepository _blogRepository;
         private string _connectionString;
-
         public BlogManager(IUserInterfaceManager parentUI, string connectionString)
         {
             _parentUI = parentUI;
             _blogRepository = new BlogRepository(connectionString);
             _connectionString = connectionString;
         }
-
         public IUserInterfaceManager Execute()
         {
             Console.WriteLine("Blog Menu");
@@ -26,7 +23,6 @@ namespace TabloidCLI.UserInterfaceManagers
             Console.WriteLine(" 4) Edit Blog");
             Console.WriteLine(" 5) Remove Blog");
             Console.WriteLine(" 0) Go Back");
-
             Console.Write("> ");
             string choice = Console.ReadLine();
             switch (choice)
@@ -60,7 +56,6 @@ namespace TabloidCLI.UserInterfaceManagers
                     return this;
             }
         }
-
         private void List()
         {
             List<Blog> blogs = _blogRepository.GetAll();
@@ -69,25 +64,20 @@ namespace TabloidCLI.UserInterfaceManagers
                 Console.WriteLine(blog);
             }
         }
-
         private Blog Choose(string prompt = null)
         {
             if (prompt == null)
             {
                 prompt = "Please choose a Blog:";
             }
-
             Console.WriteLine(prompt);
-
             List<Blog> blogs = _blogRepository.GetAll();
-
             for (int i = 0; i < blogs.Count; i++)
             {
                 Blog blog = blogs[i];
                 Console.WriteLine($" {i + 1}) {blog.Title}");
             }
             Console.Write("> ");
-
             string input = Console.ReadLine();
             try
             {
@@ -100,21 +90,16 @@ namespace TabloidCLI.UserInterfaceManagers
                 return null;
             }
         }
-
         private void Add()
         {
             Console.WriteLine("New Blog");
             Blog blog = new Blog();
-
             Console.Write("Title: ");
             blog.Title = Console.ReadLine();
-
             Console.Write("Url: ");
             blog.Url = Console.ReadLine();
-
             _blogRepository.Insert(blog);
         }
-
         private void Edit()
         {
             Blog blogToEdit = Choose("Which blog would you like to edit?");
@@ -122,7 +107,6 @@ namespace TabloidCLI.UserInterfaceManagers
             {
                 return;
             }
-
             Console.WriteLine();
             Console.Write("New Title (blank to leave unchanged: ");
             string title = Console.ReadLine();
@@ -136,10 +120,8 @@ namespace TabloidCLI.UserInterfaceManagers
             {
                 blogToEdit.Url = url;
             }
-
             _blogRepository.Update(blogToEdit);
         }
-
         private void Remove()
         {
             Blog blogToDelete = Choose("Which blog would you like to remove?");
@@ -150,4 +132,3 @@ namespace TabloidCLI.UserInterfaceManagers
         }
     }
 }
-
