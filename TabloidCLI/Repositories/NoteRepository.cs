@@ -1,7 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using TabloidCLI.Models;
 
 namespace TabloidCLI.Repositories
@@ -9,17 +8,37 @@ namespace TabloidCLI.Repositories
     public class NoteRepository : DatabaseConnector, IRepository<Note>
     {
         public NoteRepository(string connectionString) : base(connectionString) { }
-
+        public int postId { get; set; }
         public List<Note> GetAll()
         {
-            throw new NotImplementedException();
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"SELECT * FROM Note WHERE PostId = @postId";
+                    cmd.Parameters.AddWithValue("@postId", postId);
+                    List<Note> notes = new List<Note>();
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        Note note = new Note()
+                        {
+                            Title = reader.GetString(reader.GetOrdinal("Title")),
+                            Content = reader.GetString(reader.GetOrdinal("Content")),
+                            CreateDateTime = reader.GetDateTime(reader.GetOrdinal("CreateDateTime")),
+                        };
+                        notes.Add(note);
+                    }
+                    reader.Close();
+                    return notes;
+                }
+            }
         }
-
         public Note Get(int id)
         {
             throw new NotImplementedException();
         }
-
         public void Insert(Note note)
         {
             using (SqlConnection conn = Connection)
@@ -36,12 +55,10 @@ namespace TabloidCLI.Repositories
                 }
             }
         }
-
         public void Update(Note Note)
         {
             throw new NotImplementedException();
         }
-
         public void Delete(int id)
         {
             throw new NotImplementedException();
