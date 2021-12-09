@@ -24,6 +24,7 @@ namespace TabloidCLI.UserInterfaceManagers
             Console.WriteLine(" 2) Add Post");
             Console.WriteLine(" 3) Edit Post");
             Console.WriteLine(" 4) Note Management");
+            Console.WriteLine(" 5) Post Details");
             Console.WriteLine(" 0) Go Back");
 
             Console.Write("> ");
@@ -56,7 +57,28 @@ namespace TabloidCLI.UserInterfaceManagers
                     {
                         Console.WriteLine("Invalid Selection");
                         return this;
-                    }                   
+                    }
+                case "5":
+                    Console.WriteLine("Please choose a post:");
+                    List<Post> postsDetails = _postRepository.GetAll();
+                    for (int i = 0; i < postsDetails.Count; i++)
+                    {
+                        Post post = postsDetails[i];
+                        Console.WriteLine($" {i + 1}) {post.Title}");
+                    }
+                    Console.Write("> ");
+                    string userInput = Console.ReadLine();
+                    try
+                    {
+                        int uchoice = int.Parse(userInput);
+                        return new PostDetailManager(this, _connectionString, postsDetails[uchoice - 1], uchoice);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Invalid Selection");
+                        return this;
+                    }
+
                 case "0":
                     return _parentUI;
                 default:
