@@ -41,7 +41,8 @@ namespace TabloidCLI.Repositories
                     return posts;
                 }
             }
-        }       
+        }
+        
         public List<Post> GetByAuthor(int authorId)
         {
             using (SqlConnection conn = Connection)
@@ -243,7 +244,30 @@ namespace TabloidCLI.Repositories
                 }
             }
         }
-
+        public List<Tag> GetTags(Post post)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"SELECT * FROM PostTag JOIN Tag t ON PostTag.TagId = t.Id WHERE PostId = @postId";
+                    cmd.Parameters.AddWithValue("@postId", post.Id);
+                    List<Tag> tags = new List<Tag>();
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        new Tag()
+                        {
+                            Name = reader.GetString(reader.GetOrdinal("Name")),
+                            Id = reader.GetInt32(reader.GetOrdinal("Id"))
+                        };
+                    }
+                    reader.Close();
+                    return tags;
+                }
+            }
+        }
         public void InsertTag(Post post, Tag tag)
         {
             using (SqlConnection conn = Connection)
@@ -259,23 +283,19 @@ namespace TabloidCLI.Repositories
                 }
             }
         }
-        public List<string> GetTags(Post post)
+       public void DeleteTag(int postId, int tagId)
         {
             using (SqlConnection conn = Connection)
             {
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @"SELECT * FROM PostTag JOIN Tag t ON PostTag.TagId = t.Id WHERE PostId = @postId";
-                    cmd.Parameters.AddWithValue("@postId", post.Id);
-                    List<string> tags = new List<string>();
-                    SqlDataReader reader = cmd.ExecuteReader();
-                    while (reader.Read())
-                    {
-                        tags.Add(reader.GetString(reader.GetOrdinal("Name")));
-                    }
-                    reader.Close();
-                    return tags;
+                    cmd.CommandText = @"DELETE FROM PostTag 
+                                         WHERE PostId = @postId AND 
+                                               TagId = @tagId";
+                    cmd.Parameters.AddWithValue("@postId", postId);
+                    cmd.Parameters.AddWithValue("@tagId", tagId);
+                    cmd.ExecuteNonQuery();
                 }
             }
         }

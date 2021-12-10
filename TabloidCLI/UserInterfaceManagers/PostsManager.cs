@@ -172,11 +172,11 @@ namespace TabloidCLI.UserInterfaceManagers
             {
                 postToEdit.PublishDateTime = datetime;
             };
-            Console.Write("new blogId (blank to leave unchanged: ");
-            int blogid;
-            if (int.TryParse(Console.ReadLine(), out blogid))
+            Console.Write("new postId (blank to leave unchanged: ");
+            int postid;
+            if (int.TryParse(Console.ReadLine(), out postid))
             {
-                postToEdit.Blog.Id = blogid;
+                postToEdit.Blog.Id = postid;
             }
             Console.Write("new authorId (blank to leave unchanged: ");
             int authorId;
@@ -195,5 +195,6 @@ namespace TabloidCLI.UserInterfaceManagers
                 _postRepository.Delete(postToDelete.Id);
             }
         }
+        
     }
 }
