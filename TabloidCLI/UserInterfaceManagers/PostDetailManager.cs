@@ -33,6 +33,7 @@ namespace TabloidCLI.UserInterfaceManagers
             Console.WriteLine($"{post.Title} Details");
             Console.WriteLine(" 1) View Details");
             Console.WriteLine(" 2) Add Tag");
+            Console.WriteLine(" 3) Remove Tag");
             Console.Write("> ");
             string choice = Console.ReadLine();
             switch (choice)
