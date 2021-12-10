@@ -221,7 +221,8 @@ namespace TabloidCLI.Repositories
                         {
                              post = new Post()
                             {
-                                Title = reader.GetString(reader.GetOrdinal("Title")),
+                                 Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                                 Title = reader.GetString(reader.GetOrdinal("Title")),
                                 Url = reader.GetString(reader.GetOrdinal("URL")),
                                 PublishDateTime = reader.GetDateTime(reader.GetOrdinal("PublishDateTime")),
                                 Blog = new Blog()
@@ -244,5 +245,20 @@ namespace TabloidCLI.Repositories
             }
         }
 
+        public void InsertTag(Post post, Tag tag)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"INSERT INTO PostTag (PostId, TagId)
+                                                       VALUES (@postId, @tagId)";
+                    cmd.Parameters.AddWithValue("@postId", post.Id);
+                    cmd.Parameters.AddWithValue("@tagId", tag.Id);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
     }
 }
