@@ -41,8 +41,7 @@ namespace TabloidCLI.Repositories
                     return posts;
                 }
             }
-        }
-        
+        }       
         public List<Post> GetByAuthor(int authorId)
         {
             using (SqlConnection conn = Connection)
@@ -257,6 +256,26 @@ namespace TabloidCLI.Repositories
                     cmd.Parameters.AddWithValue("@postId", post.Id);
                     cmd.Parameters.AddWithValue("@tagId", tag.Id);
                     cmd.ExecuteNonQuery();
+                }
+            }
+        }
+        public List<string> GetTags(Post post)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"SELECT * FROM PostTag JOIN Tag t ON PostTag.TagId = t.Id WHERE PostId = @postId";
+                    cmd.Parameters.AddWithValue("@postId", post.Id);
+                    List<string> tags = new List<string>();
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        tags.Add(reader.GetString(reader.GetOrdinal("Name")));
+                    }
+                    reader.Close();
+                    return tags;
                 }
             }
         }
