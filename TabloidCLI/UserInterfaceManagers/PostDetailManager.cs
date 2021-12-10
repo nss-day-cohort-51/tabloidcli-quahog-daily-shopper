@@ -10,7 +10,7 @@ namespace TabloidCLI.UserInterfaceManagers
         private IUserInterfaceManager _parentUI;
         
         private PostRepository _postRepository;
-     
+        private TagRepository _tagRepository;
         private int _postId;
         private string _connectionString;
         private Post _post;
@@ -20,6 +20,7 @@ namespace TabloidCLI.UserInterfaceManagers
         {
             _parentUI = parentUI;
             _postRepository = new PostRepository(connectionString);
+            _tagRepository = new TagRepository(connectionString);
             _connectionString = connectionString;
             _post = post;
             _postId = postId;
@@ -31,13 +32,16 @@ namespace TabloidCLI.UserInterfaceManagers
             Post post = _postRepository.Get(_postId);
             Console.WriteLine($"{post.Title} Details");
             Console.WriteLine(" 1) View Details");
-
+            Console.WriteLine(" 2) Add Tag");
             Console.Write("> ");
             string choice = Console.ReadLine();
             switch (choice)
             {
                 case "1":
                     View();
+                    return this;
+                case "2":
+                    AddTag();
                     return this;
                 case "0":
                     return _parentUI;
@@ -53,7 +57,29 @@ namespace TabloidCLI.UserInterfaceManagers
 
         }
 
-       
+        private void AddTag()
+        {
+            Post post = _postRepository.Get(_postId);
+            Console.WriteLine($"Which tag would you like to add to {post.Title}?");
+            List<Tag> tags = _tagRepository.GetAll();
+            for (int i = 0; i < tags.Count; i++)
+            {
+                Tag tag = tags[i];
+                Console.WriteLine($" {i + 1}) {tag.Name}");
+            }
+            Console.Write("> ");
+            string input = Console.ReadLine();
+            try
+            {
+                int choice = int.Parse(input);
+                Tag tag = tags[choice - 1];
+                _postRepository.InsertTag(post, tag);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Invalid Selection. Won't add any tags.");
+            }
+        }
     }
 }
 
